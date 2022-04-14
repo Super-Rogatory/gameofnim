@@ -33,7 +33,7 @@ class GameOfNim(Game):
                 moves.append((i, j))
         return GameState(
             to_move=("MAX" if state.to_move == "MIN" else "MIN"),
-            utility=0,
+            utility=(-1 if state.to_move == "MIN" else 1),
             board=board,
             moves=moves,
         )
@@ -49,6 +49,10 @@ class GameOfNim(Game):
     def utility(self, state, player):
         # if "MAX" wins return 1, else return -1
         return state.utility if player == "MAX" else -state.utility
+
+    def to_move(self, state):
+        # Return the player whose move it is in this state
+        return state.to_move
 
 
 if __name__ == "__main__":

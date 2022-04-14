@@ -28,15 +28,11 @@ class GameOfNim(Game):
         board = state.board.copy()  # creates copy of the board
         # modifies the board in response to move
         (index, amount_to_remove) = move  # unpacks the index and the amount to remove
-        start = board[index]  # ex.) board[1] = 5
         board[index] -= amount_to_remove  # removes amount from element at position
-        # modifies the moves list in response to move. removing from right to left.
-        moves = list(state.moves)
-        end = start - moves.index(move)  # ex.) index 5 - 3 = 2
-        # run from index 4 and end at 1. (0) not included
-        for i in range(start - 1, end - 2, -1):
-            moves.remove(moves[i])
-
+        moves = []
+        for i in range(len(board)):
+            for j in range(1, board[i] + 1):  # ex.) changed from [0,5) to [1,6)
+                moves.append((i, j))
         return GameState(
             to_move=("MAX" if state.to_move == "MIN" else "MIN"),
             utility=0,
@@ -46,13 +42,13 @@ class GameOfNim(Game):
 
 
 if __name__ == "__main__":
-    nim = GameOfNim(board=[0, 5, 3, 1])  # Creating the game instance
+    nim = GameOfNim(board=[7, 5, 3, 1])  # Creating the game instance
     # nim = GameOfNim(board=[7, 5, 3, 1]) # a much larger tree to search
     print(nim.initial.board)  # must be [0, 5, 3, 1]
     print(
         nim.initial.moves
     )  # must be [(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (2,1), (2, 2), (2, 3), (3, 1)]
-    print(nim.result(nim.initial, (1, 5)))
+    print(nim.result(nim.initial, (1, 2)))
     utility = nim.play_game(alpha_beta_player, query_player)  # computer moves first
     if utility < 0:
         print("MIN won the game")
